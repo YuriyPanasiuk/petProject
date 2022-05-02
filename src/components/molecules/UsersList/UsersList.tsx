@@ -1,21 +1,32 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { Query, ShipsListQuery } from '../../../generated/graphql';
 import { StyledList, StyledListItem } from './UsersList.styles';
 import { ListItemAvatar, Avatar, ListItemText, Divider } from '@mui/material';
 
 export interface OwnProps {
   handleIdChange: (newId: string | null) => void;
+  filterQuery: string;
 }
 
 interface Props extends OwnProps {
   data: ShipsListQuery;
 }
 
-const UsersList: React.FC<Props> = ({ data, handleIdChange }) => {
+const UsersList: React.FC<Props> = ({ data, handleIdChange, filterQuery }) => {
+  const filteredShips = useMemo(() => {
+    if (!data || !data.ships) {
+      return [];
+    } else {
+      return data.ships?.filter((ship) =>
+        ship?.ship_name?.toLowerCase().includes(filterQuery.toLowerCase())
+      );
+    }
+  }, [filterQuery]);
+
   return (
     <StyledList>
       {!!data.ships &&
-        data.ships.map(
+        filteredShips.map(
           (ship: Query['ship']) =>
             !!ship && (
               <React.Fragment key={ship.ship_id}>
