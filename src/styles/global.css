@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-rendering: optimizeSpeed;
+}
+
+html,
+body {
+  font-size: 16px;
+  font-family: Roboto, sans-serif, serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: normal;
+}
+
+body {
+  height: 100vh;
+  background: #f7f7f9;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+ul {
+  list-style-type: none;
+}
