@@ -1,13 +1,12 @@
 import React from 'react';
-
 import { LeftSideChat, RightSideChat } from '../../organisms';
 import PubNub from 'pubnub';
-import { PubNubProvider, usePubNub } from 'pubnub-react';
+import { PubNubProvider } from 'pubnub-react';
 import users from '../../../users.json';
 
 const pubnub = new PubNub({
-  publishKey: 'pub-c-34d2d9ab-ac46-4db7-acc7-6a13cdcf5e83',
-  subscribeKey: 'sub-c-4b66e8e6-c796-11ec-b93e-fed9c56767c0',
+  publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
+  subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY || '',
   uuid: users[Math.floor(Math.random() * users.length)].id
 });
 

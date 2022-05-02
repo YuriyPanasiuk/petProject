@@ -11,7 +11,6 @@ const Item: React.FC<Props> = ({ data }) => {
   if (!data.ship) {
     return <div>No launch available</div>;
   }
-  console.log(data);
   return <div className={className}></div>;
 };
 

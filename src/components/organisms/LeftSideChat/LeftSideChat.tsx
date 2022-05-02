@@ -1,5 +1,5 @@
-import React, { useDeferredValue, useState, Suspense } from 'react';
-import { UsersList } from '../../molecules';
+import React, { useDeferredValue, useState } from 'react';
+import { ChannelList } from '../../molecules';
 import { StyledContainer, StyledTextField } from './LeftSideChat.styles';
 
 export interface OwnProps {
@@ -10,10 +10,10 @@ const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange }) => {
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
 
-  const handleFilter = (e: any) => {
-    console.log('render');
+  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setQuery(e.target.value);
   };
+
   return (
     <StyledContainer>
       <StyledTextField
@@ -22,7 +22,7 @@ const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange }) => {
         value={query}
         onChange={handleFilter}
       />
-      <UsersList handleIdChange={handleIdChange} filterQuery={deferredQuery} />
+      <ChannelList handleIdChange={handleIdChange} filterQuery={deferredQuery} />
     </StyledContainer>
   );
 };

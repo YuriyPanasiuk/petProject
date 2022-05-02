@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Query, ShipsListQuery } from '../../../generated/graphql';
-import { StyledList, StyledListItem } from './UsersList.styles';
+import { StyledList, StyledListItem } from './ChannelList.styles';
 import { ListItemAvatar, Avatar, ListItemText, Divider } from '@mui/material';
 
 export interface OwnProps {
@@ -12,7 +12,7 @@ interface Props extends OwnProps {
   data: ShipsListQuery;
 }
 
-const UsersList: React.FC<Props> = ({ data, handleIdChange, filterQuery }) => {
+const ChannelList: React.FC<Props> = ({ data, handleIdChange, filterQuery }) => {
   const filteredShips = useMemo(() => {
     if (!data || !data.ships) {
       return [];
@@ -46,4 +46,4 @@ const UsersList: React.FC<Props> = ({ data, handleIdChange, filterQuery }) => {
   );
 };
 
-export default UsersList;
+export default ChannelList;
