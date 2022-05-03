@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Avatar, IconButton } from '@mui/material';
 
-import { pages } from 'src/constants';
+import { pages } from 'src/config/constants';
 import { StyledContainer, StyledNav, StyledLink } from './Header.styles';
 
 const Header = () => {

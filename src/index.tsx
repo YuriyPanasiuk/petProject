@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
+import { store } from './config/store';
+import { Provider } from 'react-redux';
 
 const client = new ApolloClient({
   uri: 'https://spacexdata.herokuapp.com/graphql',
@@ -13,11 +15,11 @@ const client = new ApolloClient({
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <BrowserRouter>
       <ApolloProvider client={client}>
         <App />
       </ApolloProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </Provider>
 );
