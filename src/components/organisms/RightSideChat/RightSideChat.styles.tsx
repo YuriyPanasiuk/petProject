@@ -1,8 +1,7 @@
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
-import { Container } from '../../atoms';
 
-export const StyledContainer = styled(Container)`
+export const StyledContainer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;

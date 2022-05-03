@@ -3,6 +3,7 @@ import { LeftSideChat, RightSideChat } from '../../organisms';
 import PubNub from 'pubnub';
 import { PubNubProvider } from 'pubnub-react';
 import users from '../../../users.json';
+import { StyledContainer } from './Chat.styles';
 
 const user = localStorage.getItem('user');
 const randomUser = users[Math.floor(Math.random() * users.length)].id;
@@ -28,8 +29,10 @@ const Chat = () => {
 
   return (
     <PubNubProvider client={pubnub}>
-      <LeftSideChat handleIdChange={handleIdChange} activeChannelId={id} />
-      <RightSideChat id={id} />
+      <StyledContainer>
+        <LeftSideChat handleIdChange={handleIdChange} activeChannelId={id} />
+        <RightSideChat id={id} />
+      </StyledContainer>
     </PubNubProvider>
   );
 };

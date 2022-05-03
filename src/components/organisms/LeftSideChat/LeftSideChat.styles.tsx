@@ -1,9 +1,8 @@
 import { TextField } from '@mui/material';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
-import { Container } from '../../atoms';
 
-export const StyledContainer = styled(Container)`
+export const StyledContainer = styled.div`
   padding: 20px 0 10px 10px;
   display: flex;
   flex-direction: column;
