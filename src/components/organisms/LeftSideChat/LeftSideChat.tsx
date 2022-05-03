@@ -1,12 +1,16 @@
 import React, { useDeferredValue, useState } from 'react';
-import { ChannelList } from '../../molecules';
-import { StyledContainer, StyledTextField } from './LeftSideChat.styles';
+import { usePubNub } from 'pubnub-react';
+import { ChannelList, User } from '../../molecules';
+import { StyledContainer, StyledTextField, StyledText } from './LeftSideChat.styles';
+import users from '../../../users.json';
 
 export interface OwnProps {
   handleIdChange: (newId: string | null) => void;
+  activeChannelId: string | null;
 }
 
-const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange }) => {
+const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange, activeChannelId }) => {
+  const pubnub = usePubNub();
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
 
@@ -14,15 +18,29 @@ const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange }) => {
     setQuery(e.target.value);
   };
 
+  const currentUser = users.find((u) => u.id === pubnub.getUUID());
+
   return (
     <StyledContainer>
+      <User
+        userData={{
+          id: currentUser?.id,
+          name: currentUser?.name,
+          imageUrl: currentUser?.profileUrl
+        }}
+      />
       <StyledTextField
         label="Filter channel"
         variant="outlined"
         value={query}
         onChange={handleFilter}
       />
-      <ChannelList handleIdChange={handleIdChange} filterQuery={deferredQuery} />
+      <StyledText>Channels</StyledText>
+      <ChannelList
+        handleIdChange={handleIdChange}
+        filterQuery={deferredQuery}
+        activeChannelId={activeChannelId}
+      />
     </StyledContainer>
   );
 };

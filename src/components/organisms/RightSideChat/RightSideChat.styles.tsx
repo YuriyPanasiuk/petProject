@@ -7,7 +7,7 @@ export const StyledContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: calc(100vh - 40px);
+  flex-grow: 1;
   background: rgb(253, 187, 45);
   background: linear-gradient(0deg, rgba(253, 187, 45, 1) 0%, rgba(50, 162, 186, 1) 100%);
 
@@ -35,4 +35,9 @@ export const StyledContainer = styled(Container)`
     --msg__flexDirection: row-reverse;
     --msg__title__flexDirection: row-reverse;
   }
+`;
+
+export const StyledText = styled.h3`
+  color: ${theme.colors.secondary};
+  margin-top: 20px;
 `;

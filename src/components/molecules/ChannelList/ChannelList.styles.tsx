@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { theme } from 'src/styles/theme';
 
 export const StyledList = styled(List)`
-  height: calc(100% - 60px);
   overflow: auto;
 
   &::-webkit-scrollbar {
@@ -16,17 +15,5 @@ export const StyledList = styled(List)`
 
   &::-webkit-scrollbar-thumb {
     background: #aeaeae;
-  }
-`;
-
-export const StyledListItem = styled(ListItem)`
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.3s;
-
-  &:hover {
-    background: ${theme.colors.lightGray};
   }
 `;
