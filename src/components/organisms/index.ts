@@ -1,3 +1,4 @@
 export { default as LeftSideChat } from './LeftSideChat/LeftSideChat';
 export { default as RightSideChat } from './RightSideChat/RightSideChat';
 export { default as Header } from './Header/Header';
+export { default as Todos } from './Todos/Todos';

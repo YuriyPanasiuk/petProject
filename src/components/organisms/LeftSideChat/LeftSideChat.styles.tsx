@@ -1,9 +1,9 @@
-import { TextField } from '@mui/material';
+import { Input } from 'src/components/molecules';
 import { theme } from 'src/styles/theme';
 import styled from 'styled-components';
 
 export const StyledContainer = styled.div`
-  padding: 20px 0 10px 10px;
+  padding: 20px 10px 10px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -11,7 +11,7 @@ export const StyledContainer = styled.div`
   width: 350px;
 `;
 
-export const StyledTextField = styled(TextField)`
+export const StyledTextField = styled(Input)`
   width: calc(100% - 10px);
   margin: 10px 0;
 `;

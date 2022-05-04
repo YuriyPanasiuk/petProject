@@ -1,7 +1,7 @@
 import React, { useDeferredValue, useState } from 'react';
 import { usePubNub } from 'pubnub-react';
-import { ChannelList, User } from '../../molecules';
-import { StyledContainer, StyledTextField, StyledText } from './LeftSideChat.styles';
+import { ChannelList, Input, User } from '../../molecules';
+import { StyledContainer, StyledText } from './LeftSideChat.styles';
 import users from '../../../users.json';
 
 export interface OwnProps {
@@ -14,10 +14,6 @@ const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange, activeChannelId }) =
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
 
-  const handleFilter = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setQuery(e.target.value);
-  };
-
   const currentUser = users.find((u) => u.id === pubnub.getUUID());
 
   return (
@@ -29,12 +25,7 @@ const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange, activeChannelId }) =
           imageUrl: currentUser?.profileUrl
         }}
       />
-      <StyledTextField
-        label="Filter channel"
-        variant="outlined"
-        value={query}
-        onChange={handleFilter}
-      />
+      <Input label="Filter channel" value={query} onChange={setQuery} />
       <StyledText>Channels</StyledText>
       <ChannelList
         handleIdChange={handleIdChange}

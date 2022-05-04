@@ -1,23 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TodoState } from 'types/todo';
-
-const todosApi = 'https://jsonplaceholder.typicode.com/todos';
-
-export const fetchTodos = createAsyncThunk(
-  'todo/fetchTodos',
-  async function (_, { rejectWithValue }) {
-    try {
-      const responce = await fetch(`${todosApi}?_limit=10`);
-      if (!responce.ok) {
-        throw new Error(`Server error, status code - ${responce.status}`);
-      }
-      const data = await responce.json();
-      return data;
-    } catch ({ message }) {
-      return rejectWithValue(message);
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { Todo, TodoState } from 'types/todo';
+import { fetchTodos, deleteTodo, addNewTodo, changeTodoStatus } from './todo.actions';
 
 const initialState: TodoState = {
   todos: [],
@@ -25,10 +8,40 @@ const initialState: TodoState = {
   error: null
 };
 
+const errorHandler = (state: TodoState, payload: string) => {
+  state.isLoading = false;
+  state.error = payload;
+};
+
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
-  reducers: {},
+  reducers: {
+    addTodo: (state, action) => {
+      state.todos = [...state.todos, action.payload];
+    },
+
+    removeTodo: (state, action) => {
+      const id = action.payload;
+      state.todos = state.todos.filter((todo) => todo.id !== id);
+    },
+
+    toggleTodo: (state, action) => {
+      const { id, completed } = action.payload;
+
+      state.todos = state.todos.map((todo: Todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !completed
+          };
+        } else {
+          return todo;
+        }
+      });
+    }
+  },
+
   extraReducers: (builder) => {
     builder.addCase(fetchTodos.pending, (state) => {
       state.isLoading = true;
@@ -38,11 +51,21 @@ export const todoSlice = createSlice({
       state.isLoading = false;
       state.todos = action.payload;
     });
-    builder.addCase(fetchTodos.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload as string;
-    });
+    builder.addCase(fetchTodos.rejected, (state, action) =>
+      errorHandler(state, action.payload as string)
+    );
+    builder.addCase(deleteTodo.rejected, (state, action) =>
+      errorHandler(state, action.payload as string)
+    );
+    builder.addCase(addNewTodo.rejected, (state, action) =>
+      errorHandler(state, action.payload as string)
+    );
+    builder.addCase(changeTodoStatus.rejected, (state, action) =>
+      errorHandler(state, action.payload as string)
+    );
   }
 });
+
+export const { addTodo, removeTodo, toggleTodo } = todoSlice.actions;
 
 export default todoSlice.reducer;
