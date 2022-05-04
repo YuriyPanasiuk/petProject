@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,7 +7,7 @@ import { store } from './config/store';
 import { Provider } from 'react-redux';
 
 const client = new ApolloClient({
-  uri: 'https://spacexdata.herokuapp.com/graphql',
+  uri: process.env.REACT_APP_APOLLO_URI,
   cache: new InMemoryCache()
 });
 

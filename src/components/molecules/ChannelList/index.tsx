@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useShipsListQuery } from '../../../generated/graphql';
-import UsersList, { OwnProps } from './UsersList';
+import ChannelList, { OwnProps } from './ChannelList';
 
-const LaunchListContainer: React.FC<OwnProps> = (props) => {
+const ChannelListContainer: React.FC<OwnProps> = (props) => {
   const { data, error, loading } = useShipsListQuery();
 
   if (loading) {
@@ -13,7 +13,7 @@ const LaunchListContainer: React.FC<OwnProps> = (props) => {
     return <div>ERROR</div>;
   }
 
-  return <UsersList data={data} {...props} />;
+  return <ChannelList data={data} {...props} />;
 };
 
-export default LaunchListContainer;
+export default ChannelListContainer;

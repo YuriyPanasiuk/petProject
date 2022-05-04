@@ -1,13 +1,22 @@
 import { TextField } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Container } from '../../atoms';
+import { theme } from 'src/styles/theme';
+import styled from 'styled-components';
 
-export const StyledContainer = styled(Container)`
-  overflow: hidden;
+export const StyledContainer = styled.div`
   padding: 20px 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: relative;
+  width: 350px;
 `;
 
-export const StyledTextField = styled(({ ...props }) => <TextField {...props} />)`
+export const StyledTextField = styled(TextField)`
   width: calc(100% - 10px);
-  margin-bottom: 4px;
+  margin: 10px 0;
+`;
+
+export const StyledText = styled.h3`
+  color: ${theme.colors.secondary};
+  margin-top: 20px;
 `;
