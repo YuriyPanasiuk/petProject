@@ -16,31 +16,30 @@ interface Props extends OwnProps {
 
 const ChannelList: React.FC<Props> = ({ data, handleIdChange, filterQuery, activeChannelId }) => {
   const filteredShips = useMemo(() => {
-    if (!data || !data.ships) {
+    if (!data.ships) {
       return [];
-    } else {
-      return data.ships?.filter((ship) =>
-        ship?.ship_name?.toLowerCase().includes(filterQuery.toLowerCase())
-      );
     }
+
+    return data.ships?.filter((ship) =>
+      ship?.ship_name?.toLowerCase().includes(filterQuery.toLowerCase())
+    );
   }, [filterQuery]);
 
   return (
     <StyledList>
-      {!!filteredShips &&
-        filteredShips.map((ship: Query['ship']) => {
-          const { ship_id, ship_name, image } = ship || {};
-          return (
-            <React.Fragment key={ship_id}>
-              <User
-                className={`${activeChannelId === ship_id ? 'active' : ''}`}
-                handleIdChange={handleIdChange}
-                userData={{ id: ship_id!, name: ship_name!, imageUrl: image! }}
-              />
-              <Divider component="li" />
-            </React.Fragment>
-          );
-        })}
+      {filteredShips.map((ship: Query['ship']) => {
+        const { ship_id, ship_name, image } = ship || {};
+        return (
+          <React.Fragment key={ship_id}>
+            <User
+              className={`${activeChannelId === ship_id ? 'active' : ''}`}
+              handleIdChange={handleIdChange}
+              userData={{ id: ship_id!, name: ship_name!, imageUrl: image! }}
+            />
+            <Divider component="li" />
+          </React.Fragment>
+        );
+      })}
     </StyledList>
   );
 };

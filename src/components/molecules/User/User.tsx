@@ -9,9 +9,9 @@ const User: React.FC<UserProps> = ({ userData, handleIdChange, className }) => {
   const handleClick = () => {
     if (!handleIdChange || !id) {
       return;
-    } else {
-      handleIdChange(id);
     }
+
+    handleIdChange(id);
   };
 
   return (

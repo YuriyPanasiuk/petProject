@@ -4,7 +4,7 @@ import 'src/styles/global.css';
 import { ChatPage, TodoPage } from './components/pages';
 import Layout from './components/templates/Layout';
 import { Routes, Route } from 'react-router-dom';
-import { AppRoutes } from 'src/constants';
+import { AppRoutes } from 'src/config/constants';
 
 function App() {
   return (
