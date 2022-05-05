@@ -5,7 +5,8 @@ import { fetchTodos, deleteTodo, addNewTodo, changeTodoStatus } from './todo.act
 const initialState: TodoState = {
   todos: [],
   isLoading: true,
-  error: null
+  error: null,
+  user: null
 };
 
 const errorHandler = (state: TodoState, payload: string) => {
@@ -39,6 +40,9 @@ export const todoSlice = createSlice({
           return todo;
         }
       });
+    },
+    addUser: (state, action) => {
+      state.user = action.payload;
     }
   },
 
@@ -66,6 +70,6 @@ export const todoSlice = createSlice({
   }
 });
 
-export const { addTodo, removeTodo, toggleTodo } = todoSlice.actions;
+export const { addTodo, removeTodo, toggleTodo, addUser } = todoSlice.actions;
 
 export default todoSlice.reducer;

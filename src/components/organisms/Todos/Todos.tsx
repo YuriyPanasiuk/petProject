@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch } from 'src/config/store';
 import { Button, List } from '@mui/material';
 import { Input, TodoItem } from 'src/components/molecules';
@@ -10,6 +10,7 @@ import { addNewTodo, deleteTodo, changeTodoStatus } from 'src/store/todo/todo.ac
 const TodoList: React.FC<TodosProps> = ({ todos }) => {
   const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
+  const listRef = useRef<HTMLUListElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +29,14 @@ const TodoList: React.FC<TodosProps> = ({ todos }) => {
     setValue('');
   };
 
+  useEffect(() => {
+    //scroll to bottom list
+    const listElement = listRef.current;
+    if (listElement) {
+      listElement.scroll({ top: listElement.scrollHeight, behavior: 'smooth' });
+    }
+  }, [todos]);
+
   return (
     <StyledContainer>
       <StyledText>Todo List</StyledText>
@@ -37,7 +46,11 @@ const TodoList: React.FC<TodosProps> = ({ todos }) => {
           Add
         </Button>
       </StyledForm>
-      <List>
+      <List
+        sx={{
+          overflow: 'auto'
+        }}
+        ref={listRef}>
         {todos.map((todo) => (
           <TodoItem
             key={todo.id}

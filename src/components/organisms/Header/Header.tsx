@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { AppBar, Avatar, IconButton } from '@mui/material';
 
 import { pages } from 'src/config/constants';
 import { StyledContainer, StyledNav, StyledLink } from './Header.styles';
+import { useSelector } from 'react-redux';
+import { todoSelector } from 'src/store/todo/todo.selector';
 
 const Header = () => {
+  const { user } = useSelector(todoSelector);
+  console.log(user);
   return (
     <AppBar position="fixed">
       <StyledContainer>
@@ -16,7 +20,7 @@ const Header = () => {
           ))}
         </StyledNav>
         <IconButton>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+          <Avatar alt="Remy Sharp" src={user?.profileUrl} />
         </IconButton>
       </StyledContainer>
     </AppBar>
