@@ -1,4 +1,4 @@
-import { List, ListItem } from '@mui/material';
+import { List } from '@mui/material';
 import styled from 'styled-components';
 import { theme } from 'src/styles/theme';
 
