@@ -1,8 +1,7 @@
 export interface TodoState {
-  todos: Todo[];
+  todos: Todo[] | null;
   isLoading: boolean;
   error: string | null;
-  user: any;
 }
 
 export type Todo = {

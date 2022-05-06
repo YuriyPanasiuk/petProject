@@ -7,19 +7,19 @@ import { Loader } from 'src/components/atoms';
 import { Todos } from 'src/components/organisms';
 import { StyledContainer } from './TodoPage.styles';
 
-const state = JSON.parse(localStorage.getItem('applicationState') as string);
-
 const TodoPage = () => {
   const dispatch = useAppDispatch();
   const { isLoading, todos } = useSelector(todoSelector);
 
   useEffect(() => {
-    if (!state || !state.todo) {
+    if (!todos) {
       dispatch(fetchTodos());
     }
   }, [dispatch]);
 
-  return <StyledContainer>{isLoading ? <Loader /> : <Todos todos={todos} />}</StyledContainer>;
+  return (
+    <StyledContainer>{isLoading ? <Loader /> : <Todos todos={todos || []} />}</StyledContainer>
+  );
 };
 
 export default TodoPage;

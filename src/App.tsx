@@ -1,51 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import PubNub from 'pubnub';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import 'normalize.css';
 import 'src/styles/global.css';
-import { ChatPage, TodoPage } from './components/pages';
+
+import { HomePage, ChatPage, TodoPage, LoginPage } from './components/pages';
 import Layout from './components/templates/Layout';
-import { Routes, Route } from 'react-router-dom';
+import { PrivatePage } from './components/atoms';
 import { AppRoutes } from 'src/config/constants';
-import users from './users.json';
-import { useAppDispatch } from './config/store';
-import { addUser } from 'src/store/todo/todo.slice';
-
-const userId = localStorage.getItem('userId');
-const randomUser = users[Math.floor(Math.random() * users.length)];
-
-const pubnub = new PubNub({
-  publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
-  subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY || '',
-  uuid: userId ? userId : randomUser.id
-});
 
 function App() {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (!userId) {
-      localStorage.setItem('userId', JSON.stringify(randomUser));
-      dispatch(addUser(randomUser));
-    }
-  }, []);
-
   return (
-    <Layout>
-      <Routes>
-        <Route path={AppRoutes.LOGIN} element={<Home />} />
-        <Route path={AppRoutes.CHAT} element={<ChatPage pubnubClient={pubnub} />} />
-        <Route path={AppRoutes.TODO_LIST} element={<TodoPage />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      <Route path={AppRoutes.LOGIN} element={<LoginPage />} />
+      <Route path={AppRoutes.HOME} element={<Layout />}>
+        <Route path={AppRoutes.HOME} element={<PrivatePage />}>
+          <Route index element={<HomePage />} />
+        </Route>
+        <Route path={AppRoutes.CHAT} element={<PrivatePage />}>
+          <Route path="" element={<ChatPage />} />
+        </Route>
+        <Route path={AppRoutes.TODO_LIST} element={<PrivatePage />}>
+          <Route path="" element={<TodoPage />} />
+        </Route>
+      </Route>
+    </Routes>
   );
 }
+
 export default App;
-
-const Home = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="container">
-      <button onClick={() => setIsOpen(!isOpen)}>Login</button>
-    </div>
-  );
-};
