@@ -10,6 +10,7 @@ import { AppRoutes } from 'src/config/constants';
 
 const HomePage = () => {
   const user = useSelector(getUser);
+
   return (
     <StyledContainer>
       <Card sx={{ maxWidth: 400 }}>

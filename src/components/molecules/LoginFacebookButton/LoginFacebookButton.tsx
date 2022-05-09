@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
@@ -6,19 +6,20 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { useAppDispatch } from 'src/config/store';
 import { setUser } from 'src/store/common/common.slice';
 import { AppRoutes } from 'src/config/constants';
+import { ReactFacebookLoginInfo } from 'react-facebook-login';
 
 const LoginFacebookButton = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const responseFacebook = (response: any) => {
+  const responseFacebook = (response: ReactFacebookLoginInfo) => {
     const { userID, name, picture } = response;
-    console.log(response);
+
     if (response.accessToken) {
       const facebookUser = {
         id: userID,
         name,
-        imageUrl: picture.data.url || null,
+        imageUrl: picture?.data.url || null,
         loggedInWith: 'facebook'
       };
       dispatch(setUser(facebookUser));

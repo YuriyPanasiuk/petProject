@@ -6,7 +6,7 @@ const initialState: CommonState = {
 };
 
 export const commonSlice = createSlice({
-  name: 'todo',
+  name: 'common',
   initialState,
   reducers: {
     setUser: (state, action) => {

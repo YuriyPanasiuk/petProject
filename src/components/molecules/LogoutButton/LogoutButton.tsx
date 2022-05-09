@@ -6,8 +6,6 @@ import { MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from 'src/config/constants';
 
-const clientId = process.env.REACT_APP_GOOGLE_ID as string;
-
 interface Props {
   handleClose: () => void;
   loggedInWith: string;
@@ -29,7 +27,7 @@ const LogoutButton: React.FC<Props> = ({ handleClose, loggedInWith }) => {
   };
 
   const { signOut } = useGoogleLogout({
-    clientId,
+    clientId: process.env.REACT_APP_GOOGLE_ID as string,
     onLogoutSuccess,
     onFailure
   });
