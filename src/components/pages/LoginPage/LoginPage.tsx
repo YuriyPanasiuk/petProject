@@ -1,12 +1,12 @@
 import React from 'react';
 import { Card, CardContent, Typography, CardActions } from '@mui/material';
-import { LoginGoogleButton } from 'src/components/molecules';
+import { LoginGoogleButton, LoginFacebookButton } from 'src/components/molecules';
 import { StyledContainer } from './LoginPage.styles';
 
 const LoginPage = () => {
   return (
     <StyledContainer>
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ maxWidth: 500 }}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             Welcome
@@ -17,6 +17,7 @@ const LoginPage = () => {
         </CardContent>
         <CardActions>
           <LoginGoogleButton />
+          <LoginFacebookButton />
         </CardActions>
       </Card>
     </StyledContainer>

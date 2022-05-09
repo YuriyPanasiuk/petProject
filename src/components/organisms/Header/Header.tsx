@@ -42,7 +42,10 @@ const Header = () => {
             }}
             open={isOpenMenu}
             onClose={() => setIsOpenMenu(false)}>
-            <LogoutButton handleClose={() => setIsOpenMenu(false)} />
+            <LogoutButton
+              handleClose={() => setIsOpenMenu(false)}
+              loggedInWith={user?.loggedInWith || ''}
+            />
           </Menu>
         </Box>
       </StyledContainer>

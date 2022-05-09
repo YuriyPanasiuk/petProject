@@ -2,11 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import {
-  useGoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline
-} from 'react-google-login';
+import { GoogleLoginResponse, GoogleLoginResponseOffline, GoogleLogin } from 'react-google-login';
 import { useAppDispatch } from 'src/config/store';
 import { setUser } from 'src/store/common/common.slice';
 import { AppRoutes } from 'src/config/constants';
@@ -19,8 +15,17 @@ const LoginGoogleButton = () => {
 
   const onSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     const { profileObj } = res as GoogleLoginResponse;
-    dispatch(setUser(profileObj));
-    localStorage.setItem('userId', profileObj.googleId);
+    const { googleId, name, imageUrl } = profileObj;
+
+    const googleUser = {
+      id: googleId,
+      name,
+      imageUrl,
+      loggedInWith: 'google'
+    };
+
+    dispatch(setUser(googleUser));
+    localStorage.setItem('userId', googleId);
     navigate(AppRoutes.HOME);
   };
 
@@ -28,18 +33,18 @@ const LoginGoogleButton = () => {
     console.log('Login failed: res:', res);
   };
 
-  const { signIn } = useGoogleLogin({
-    onSuccess,
-    onFailure,
-    clientId,
-    isSignedIn: true,
-    accessType: 'offline'
-  });
-
   return (
-    <Button onClick={signIn} variant="contained" startIcon={<GoogleIcon />}>
-      Sign in with Google
-    </Button>
+    <GoogleLogin
+      clientId={clientId}
+      render={(renderProps) => (
+        <Button onClick={renderProps.onClick} variant="contained" startIcon={<GoogleIcon />}>
+          Sign in with Google
+        </Button>
+      )}
+      onSuccess={onSuccess}
+      onFailure={onFailure}
+      cookiePolicy={'single_host_origin'}
+    />
   );
 };
 

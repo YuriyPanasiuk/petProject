@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGoogleLogout } from 'react-google-login';
 import { useAppDispatch } from 'src/config/store';
 import { setUser } from 'src/store/common/common.slice';
@@ -10,9 +10,10 @@ const clientId = process.env.REACT_APP_GOOGLE_ID as string;
 
 interface Props {
   handleClose: () => void;
+  loggedInWith: string;
 }
 
-const LogoutButton: React.FC<Props> = ({ handleClose }) => {
+const LogoutButton: React.FC<Props> = ({ handleClose, loggedInWith }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -33,8 +34,22 @@ const LogoutButton: React.FC<Props> = ({ handleClose }) => {
     onFailure
   });
 
+  const handleLogOut = () => {
+    switch (loggedInWith) {
+      case 'facebook':
+        onLogoutSuccess();
+        window.FB.api('/me/permissions', 'delete', null, () => window.FB.logout());
+        break;
+      case 'google':
+        signOut();
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <MenuItem onClick={signOut}>
+    <MenuItem onClick={handleLogOut}>
       <Typography textAlign="center">Logout</Typography>
     </MenuItem>
   );

@@ -1,8 +1,8 @@
 export type UserType = {
-  name?: string;
-  id?: string;
+  name: string;
+  id: string;
   imageUrl?: string;
-  googleId?: string;
+  loggedInWith?: string;
 };
 
 export interface CommonState {

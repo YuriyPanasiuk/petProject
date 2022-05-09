@@ -13,7 +13,7 @@ const RightSideChat: React.FC<Props> = ({ channelId }) => {
   //temporary
   const preparedUserForChat: any = useMemo(() => {
     return {
-      id: user?.googleId,
+      id: user?.id,
       name: user?.name,
       profileUrl: user?.imageUrl
     };

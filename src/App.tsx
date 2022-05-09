@@ -23,6 +23,7 @@ function App() {
           <Route path="" element={<TodoPage />} />
         </Route>
       </Route>
+      <Route path="*" element={<p>There nothing here: 404!</p>} />
     </Routes>
   );
 }

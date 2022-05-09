@@ -16,13 +16,7 @@ const LeftSideChat: React.FC<OwnProps> = ({ handleIdChange, activeChannelId }) =
 
   return (
     <StyledContainer>
-      <User
-        userData={{
-          id: user?.googleId,
-          name: user?.name,
-          imageUrl: user?.imageUrl
-        }}
-      />
+      {user && <User userData={user} />}
       <Input label="Filter channel" value={query} onChange={setQuery} />
       <StyledText>Channels</StyledText>
       <ChannelList
