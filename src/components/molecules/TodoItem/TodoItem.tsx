@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Checkbox,
   IconButton,
@@ -6,50 +6,66 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  TextField,
-  Box
+  TextField
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 import { Todo } from 'src/types/todo';
 import { useAppDispatch } from 'src/config/store';
-import { editTodo } from 'src/store/todo/todo.actions';
+import { deleteTodo, editTodo } from 'src/store/todo/todo.actions';
 
 interface Props {
   todo: Todo;
   labelId: string;
-  handleDelete: () => void;
-  handleToggle: any;
-  handleEdit: any;
-  onEditSave: any;
-  isEdit: boolean;
-  handleBlur: any;
-  handleChange: any;
-  newTitle: any;
+  handleNeedAddNewTodo: (value: boolean) => void;
 }
 
-const TodoItem: React.FC<Props> = ({
-  todo,
-  labelId,
-  handleDelete,
-  handleChange,
-  handleToggle,
-  handleEdit,
-  onEditSave,
-  isEdit,
-  handleBlur,
-  newTitle
-}) => {
-  console.log('render');
+const TodoItem: React.FC<Props> = ({ todo, labelId, handleNeedAddNewTodo }) => {
+  const dispatch = useAppDispatch();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [newTitle, setNewTitle] = useState('');
+  const [editTodoId, setEditTodoId] = useState<number | null>(null);
+
+  const handleEdit = () => {
+    setEditTodoId(todo.id);
+    setNewTitle(todo.title);
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!e.shiftKey && e.keyCode === 13) {
+      e.preventDefault();
+      if (!newTitle.trim().length) {
+        return;
+      }
+      dispatch(editTodo({ ...todo, title: newTitle }));
+      setEditTodoId(null);
+      setNewTitle('');
+      handleNeedAddNewTodo(true);
+    }
+  };
+
+  const handleBlur = () => {
+    setEditTodoId(null);
+  };
+
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      const end = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(end, end);
+      inputRef.current.focus();
+    }
+  }, [editTodoId]);
+
   return (
     <ListItem
       secondaryAction={
-        <IconButton edge="end" onClick={handleDelete}>
+        <IconButton edge="end" onClick={() => dispatch(deleteTodo(todo.id))}>
           <DeleteIcon />
         </IconButton>
       }
       disablePadding>
       <ListItemButton dense onDoubleClick={handleEdit}>
-        <ListItemIcon onClick={handleToggle}>
+        <ListItemIcon onClick={() => dispatch(editTodo({ ...todo, completed: !todo.completed }))}>
           <Checkbox
             edge="start"
             checked={todo.completed}
@@ -58,14 +74,16 @@ const TodoItem: React.FC<Props> = ({
             inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        {isEdit ? (
-          <textarea
-            autoFocus
+        {editTodoId === todo.id ? (
+          <TextField
+            multiline
+            maxRows={4}
+            inputRef={inputRef}
             value={newTitle}
-            onChange={handleChange}
-            onKeyDown={onEditSave}
+            onChange={({ target }) => setNewTitle(target.value)}
+            onKeyDown={onKeyPress}
             onBlur={handleBlur}
-            style={{ resize: 'vertical', padding: '10px', width: '100%' }}
+            fullWidth
           />
         ) : (
           <ListItemText

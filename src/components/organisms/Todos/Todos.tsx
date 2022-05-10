@@ -1,98 +1,91 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAppDispatch } from 'src/config/store';
-import { Button, List } from '@mui/material';
+import { Button, List, TextField } from '@mui/material';
 import { TodoItem } from 'src/components/molecules';
 
 import { StyledContainer, StyledText } from './Todos.styles';
 import { TodosProps } from './Todos.types';
-import { addNewTodo, deleteTodo, editTodo } from 'src/store/todo/todo.actions';
+import { addNewTodo } from 'src/store/todo/todo.actions';
 
 const TodoList: React.FC<TodosProps> = ({ todos }) => {
   const dispatch = useAppDispatch();
-  const [newTitle, setNewTitle] = useState('');
-  const [editTodoId, setEditTodoId] = useState<number | null>(null);
+  const [newTodoTitle, setNewTodoTitle] = useState('');
   const [isNeedAddNewTodo, setIsNeedAddNewTodo] = useState(false);
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewTitle(event.target.value);
-  };
-
-  const handleEdit = (todo: any) => {
-    setEditTodoId(todo.id);
-    setNewTitle(todo.title);
-  };
+  const listRef = useRef<HTMLUListElement>(null);
 
   const handleAddNewTodo = () => {
-    setNewTitle('');
     setIsNeedAddNewTodo(true);
+    setNewTodoTitle('');
   };
 
-  const onKeyPress = (e: any, todo: any) => {
+  const onKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (!e.shiftKey && e.keyCode === 13) {
       e.preventDefault();
-      if (!newTitle.trim().length) {
+      if (!newTodoTitle.trim().length) {
         return;
       }
+      const newTodo = {
+        userId: 1,
+        id: +new Date(),
+        completed: false,
+        title: newTodoTitle
+      };
 
-      if (isNeedAddNewTodo) {
-        const newTodo = {
-          ...testTodo,
-          title: newTitle
-        };
-        dispatch(addNewTodo(newTodo));
-        setNewTitle('');
-      } else {
-        dispatch(editTodo({ ...todo, title: newTitle }));
-        setEditTodoId(null);
-        setNewTitle('');
-        setIsNeedAddNewTodo(true);
-      }
+      dispatch(addNewTodo(newTodo));
+      setNewTodoTitle('');
     }
   };
 
   const handleBlur = () => {
-    setEditTodoId(null);
-    if (!newTitle.trim().length) {
-      setIsNeedAddNewTodo(false);
+    if (newTodoTitle) {
+      return;
     }
+    setNewTodoTitle('');
+    setIsNeedAddNewTodo(false);
   };
 
-  const testTodo = {
-    userId: 1,
-    id: +new Date(),
-    completed: false,
-    title: ''
-  };
+  useEffect(() => {
+    //scroll to bottom list
+    const listElement = listRef.current;
+    if (listElement) {
+      listElement.scroll({ top: listElement.scrollHeight, behavior: 'smooth' });
+    }
+  }, [todos]);
 
   return (
     <StyledContainer>
       <StyledText>Todo List</StyledText>
-      <List>
+      <List
+        sx={{
+          overflow: 'auto'
+        }}
+        ref={listRef}>
         {todos.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}
-            handleChange={handleChange}
-            newTitle={newTitle}
-            handleDelete={() => dispatch(deleteTodo(todo.id))}
-            handleToggle={() => dispatch(editTodo({ ...todo, completed: !todo.completed }))}
-            handleEdit={() => handleEdit(todo)}
-            onEditSave={(e: any) => onKeyPress(e, todo)}
             labelId={`checkbox-list-label-${todo.id}`}
-            isEdit={todo.id === editTodoId}
-            handleBlur={handleBlur}
+            handleNeedAddNewTodo={setIsNeedAddNewTodo}
           />
         ))}
-        {isNeedAddNewTodo && (
-          <textarea
-            value={newTitle}
-            onChange={handleChange}
-            onKeyDown={(e: any) => onKeyPress(e, testTodo)}
-            onBlur={handleBlur}
-          />
-        )}
       </List>
-      <Button variant="contained" onClick={handleAddNewTodo}>
+      {isNeedAddNewTodo && (
+        <TextField
+          autoFocus
+          multiline
+          value={newTodoTitle}
+          onChange={({ target }) => setNewTodoTitle(target.value)}
+          onKeyDown={onKeyPress}
+          onBlur={handleBlur}
+          fullWidth
+        />
+      )}
+      <Button
+        variant="contained"
+        onClick={handleAddNewTodo}
+        sx={{
+          margin: '20px auto 0 0'
+        }}>
         Add new todo
       </Button>
     </StyledContainer>

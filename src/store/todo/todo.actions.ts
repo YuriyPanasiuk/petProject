@@ -8,7 +8,7 @@ export const fetchTodos = createAsyncThunk(
   'todo/fetchTodos',
   async function (_, { rejectWithValue }) {
     try {
-      const responce = await fetch(`${todosApi}?_limit=1`);
+      const responce = await fetch(`${todosApi}?_limit=5`);
       if (!responce.ok) {
         throw new Error(`Server error, status code - ${responce.status}`);
       }

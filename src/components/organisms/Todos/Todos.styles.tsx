@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 export const StyledContainer = styled(Paper)`
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const StyledText = styled.h3`
