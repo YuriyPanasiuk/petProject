@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Todo, TodoState } from 'types/todo';
-import { fetchTodos, deleteTodo, addNewTodo, changeTodoStatus } from './todo.actions';
+import { fetchTodos, deleteTodo, addNewTodo, editTodo } from './todo.actions';
 
 const initialState: TodoState = {
   todos: [],
@@ -26,15 +26,12 @@ export const todoSlice = createSlice({
       state.todos = state.todos.filter((todo) => todo.id !== id);
     },
 
-    toggleTodo: (state, action) => {
-      const { id, completed } = action.payload;
+    editTodoState: (state, action) => {
+      const newTodo = action.payload;
 
       state.todos = state.todos.map((todo: Todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            completed: !completed
-          };
+        if (todo.id === newTodo.id) {
+          return newTodo;
         } else {
           return todo;
         }
@@ -60,12 +57,12 @@ export const todoSlice = createSlice({
     builder.addCase(addNewTodo.rejected, (state, action) =>
       errorHandler(state, action.payload as string)
     );
-    builder.addCase(changeTodoStatus.rejected, (state, action) =>
+    builder.addCase(editTodo.rejected, (state, action) =>
       errorHandler(state, action.payload as string)
     );
   }
 });
 
-export const { addTodo, removeTodo, toggleTodo } = todoSlice.actions;
+export const { addTodo, removeTodo, editTodoState } = todoSlice.actions;
 
 export default todoSlice.reducer;

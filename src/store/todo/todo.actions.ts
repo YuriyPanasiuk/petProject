@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Todo } from 'src/types/todo';
-import { addTodo, removeTodo, toggleTodo } from './todo.slice';
+import { addTodo, removeTodo, editTodoState } from './todo.slice';
 
 const todosApi = 'https://jsonplaceholder.typicode.com/todos';
 
@@ -8,7 +8,7 @@ export const fetchTodos = createAsyncThunk(
   'todo/fetchTodos',
   async function (_, { rejectWithValue }) {
     try {
-      const responce = await fetch(`${todosApi}?_limit=10}`);
+      const responce = await fetch(`${todosApi}?_limit=1`);
       if (!responce.ok) {
         throw new Error(`Server error, status code - ${responce.status}`);
       }
@@ -60,15 +60,13 @@ export const addNewTodo = createAsyncThunk(
   }
 );
 
-export const changeTodoStatus = createAsyncThunk(
-  'todo/changeTodoStatus',
+export const editTodo = createAsyncThunk(
+  'todo/editTodo',
   async function (todo: Todo, { rejectWithValue, dispatch }) {
     try {
       const responce = await fetch(`${todosApi}/${todo.id}`, {
         method: 'PATCH',
-        body: JSON.stringify({
-          completed: !todo.completed
-        }),
+        body: JSON.stringify(todo),
         headers: {
           'Content-type': 'application/json; charset=UTF-8'
         }
@@ -78,7 +76,7 @@ export const changeTodoStatus = createAsyncThunk(
         throw new Error(`Server error, status code - ${responce.status}`);
       }
 
-      dispatch(toggleTodo(todo));
+      dispatch(editTodoState(todo));
     } catch ({ message }) {
       return rejectWithValue(message);
     }
