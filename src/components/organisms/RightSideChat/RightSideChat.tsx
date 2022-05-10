@@ -3,19 +3,23 @@ import { StyledContainer, StyledText } from './RightSideChat.styles';
 import { Chat, MessageInput, MessageList } from '@pubnub/react-chat-components';
 import { useSelector } from 'react-redux';
 import { getUser } from 'src/store/common/common.selector';
+import { ObjectCustom, UUIDMetadataObject } from 'pubnub';
+import { UserType } from 'src/types/common';
 
 interface Props {
   channelId: string | null;
 }
 const RightSideChat: React.FC<Props> = ({ channelId }) => {
-  const user = useSelector(getUser);
+  const user = useSelector(getUser) as UserType;
 
-  //temporary
-  const preparedUserForChat: any = useMemo(() => {
+  const preparedUserForChat: UUIDMetadataObject<ObjectCustom> = useMemo(() => {
     return {
-      id: user?.id,
-      name: user?.name,
-      profileUrl: user?.imageUrl
+      id: user.id,
+      name: user.name,
+      profileUrl: user?.imageUrl,
+      eTag: 'test',
+      created: `${new Date()}`,
+      updated: `${new Date()}`
     };
   }, [user]);
 

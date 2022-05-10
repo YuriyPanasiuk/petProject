@@ -5,7 +5,7 @@ import { StyledContainer } from './ChatPage.styles';
 
 const ChatPage = () => {
   const pubnub = usePubNub();
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId') as string;
   const [channelId, setChannelId] = React.useState<string | null>(null);
 
   const handleIdChange = React.useCallback((newChannelId: string | null) => {
@@ -14,7 +14,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     if (userId !== pubnub.getUUID()) {
-      pubnub.setUUID(userId as string);
+      pubnub.setUUID(userId);
     }
   }, []);
 

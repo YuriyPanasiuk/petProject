@@ -17,9 +17,7 @@ const TodoPage = () => {
     }
   }, [dispatch]);
 
-  return (
-    <StyledContainer>{isLoading ? <Loader /> : <Todos todos={todos || []} />}</StyledContainer>
-  );
+  return <StyledContainer>{isLoading ? <Loader /> : <Todos todos={todos} />}</StyledContainer>;
 };
 
 export default TodoPage;

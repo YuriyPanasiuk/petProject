@@ -7,7 +7,7 @@ import { StyledContainer, StyledText, StyledForm } from './Todos.styles';
 import { TodosProps } from './Todos.types';
 import { addNewTodo, deleteTodo, changeTodoStatus } from 'src/store/todo/todo.actions';
 
-const TodoList: React.FC<TodosProps> = ({ todos }) => {
+const TodoList: React.FC<TodosProps> = ({ todos = [] }) => {
   const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
   const listRef = useRef<HTMLUListElement>(null);
@@ -51,7 +51,7 @@ const TodoList: React.FC<TodosProps> = ({ todos }) => {
           overflow: 'auto'
         }}
         ref={listRef}>
-        {todos.map((todo) => (
+        {todos?.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}

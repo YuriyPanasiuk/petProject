@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useGoogleLogout } from 'react-google-login';
 import { useAppDispatch } from 'src/config/store';
 import { setUser } from 'src/store/common/common.slice';
@@ -26,20 +26,24 @@ const LogoutButton: React.FC<Props> = ({ handleClose, loggedInWith }) => {
     console.log('Handle failure cases');
   };
 
-  const { signOut } = useGoogleLogout({
+  const googleSignOut = useGoogleLogout({
     clientId: process.env.REACT_APP_GOOGLE_ID as string,
     onLogoutSuccess,
     onFailure
   });
 
+  const facebookSignOut = () => {
+    window.FB.api('/me/permissions', 'delete', null, () => window.FB.logout());
+    onLogoutSuccess();
+  };
+
   const handleLogOut = () => {
     switch (loggedInWith) {
       case 'facebook':
-        onLogoutSuccess();
-        window.FB.api('/me/permissions', 'delete', null, () => window.FB.logout());
+        facebookSignOut();
         break;
       case 'google':
-        signOut();
+        googleSignOut.signOut();
         break;
       default:
         break;
