@@ -3,7 +3,7 @@ import { Todo, TodoState } from 'types/todo';
 import { fetchTodos, deleteTodo, addNewTodo, changeTodoStatus } from './todo.actions';
 
 const initialState: TodoState = {
-  todos: [],
+  todos: null,
   isLoading: true,
   error: null
 };
@@ -18,27 +18,28 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state, action) => {
-      state.todos = [...state.todos, action.payload];
+      state.todos?.push(action.payload);
     },
 
     removeTodo: (state, action) => {
       const id = action.payload;
-      state.todos = state.todos.filter((todo) => todo.id !== id);
+      state.todos = state.todos?.filter((todo) => todo.id !== id) || [];
     },
 
     toggleTodo: (state, action) => {
       const { id, completed } = action.payload;
 
-      state.todos = state.todos.map((todo: Todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            completed: !completed
-          };
-        } else {
-          return todo;
-        }
-      });
+      state.todos =
+        state.todos?.map((todo: Todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              completed: !completed
+            };
+          } else {
+            return todo;
+          }
+        }) || [];
     }
   },
 
