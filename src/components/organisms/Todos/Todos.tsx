@@ -1,32 +1,47 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch } from 'src/config/store';
-import { Button, List } from '@mui/material';
-import { Input, TodoItem } from 'src/components/molecules';
+import { Button, List, TextField } from '@mui/material';
+import { TodoItem } from 'src/components/molecules';
 
-import { StyledContainer, StyledText, StyledForm } from './Todos.styles';
+import { StyledContainer, StyledText } from './Todos.styles';
 import { TodosProps } from './Todos.types';
-import { addNewTodo, deleteTodo, changeTodoStatus } from 'src/store/todo/todo.actions';
+import { addNewTodo } from 'src/store/todo/todo.actions';
 
 const TodoList: React.FC<TodosProps> = ({ todos = [] }) => {
   const dispatch = useAppDispatch();
-  const [value, setValue] = useState('');
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [isNeedAddNewTodo, setIsNeedAddNewTodo] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!value.trim().length) {
+  const handleAddNewTodo = () => {
+    setIsNeedAddNewTodo(true);
+    setNewTodoTitle('');
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!e.shiftKey && e.keyCode === 13) {
+      e.preventDefault();
+      if (!newTodoTitle.trim().length) {
+        return;
+      }
+      const newTodo = {
+        userId: 1,
+        id: +new Date(),
+        completed: false,
+        title: newTodoTitle
+      };
+
+      dispatch(addNewTodo(newTodo));
+      setNewTodoTitle('');
+    }
+  };
+
+  const handleBlur = () => {
+    if (newTodoTitle) {
       return;
     }
-
-    const newTodo = {
-      id: Date.now(),
-      title: value.trimStart(),
-      userId: 1,
-      completed: false
-    };
-
-    dispatch(addNewTodo(newTodo));
-    setValue('');
+    setNewTodoTitle('');
+    setIsNeedAddNewTodo(false);
   };
 
   useEffect(() => {
@@ -40,12 +55,6 @@ const TodoList: React.FC<TodosProps> = ({ todos = [] }) => {
   return (
     <StyledContainer>
       <StyledText>Todo List</StyledText>
-      <StyledForm onSubmit={handleSubmit}>
-        <Input value={value} label="Add new todo" onChange={setValue} />
-        <Button variant="contained" onClick={handleSubmit}>
-          Add
-        </Button>
-      </StyledForm>
       <List
         sx={{
           overflow: 'auto'
@@ -55,12 +64,30 @@ const TodoList: React.FC<TodosProps> = ({ todos = [] }) => {
           <TodoItem
             key={todo.id}
             todo={todo}
-            handleDelete={() => dispatch(deleteTodo(todo.id))}
-            handleToggle={() => dispatch(changeTodoStatus(todo))}
             labelId={`checkbox-list-label-${todo.id}`}
+            handleNeedAddNewTodo={setIsNeedAddNewTodo}
           />
         ))}
       </List>
+      {isNeedAddNewTodo && (
+        <TextField
+          autoFocus
+          multiline
+          value={newTodoTitle}
+          onChange={({ target }) => setNewTodoTitle(target.value)}
+          onKeyDown={onKeyPress}
+          onBlur={handleBlur}
+          fullWidth
+        />
+      )}
+      <Button
+        variant="contained"
+        onClick={handleAddNewTodo}
+        sx={{
+          margin: '20px auto 0 0'
+        }}>
+        Add new todo
+      </Button>
     </StyledContainer>
   );
 };

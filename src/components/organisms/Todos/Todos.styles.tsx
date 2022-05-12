@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const StyledContainer = styled(Paper)`
   padding: 20px;
-  height: 100%;
   display: flex;
   flex-direction: column;
 `;
