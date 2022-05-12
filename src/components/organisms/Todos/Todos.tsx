@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAppDispatch } from 'src/config/store';
 import { Button, List, TextField } from '@mui/material';
 import { TodoItem } from 'src/components/molecules';
@@ -7,7 +7,7 @@ import { StyledContainer, StyledText } from './Todos.styles';
 import { TodosProps } from './Todos.types';
 import { addNewTodo } from 'src/store/todo/todo.actions';
 
-const TodoList: React.FC<TodosProps> = ({ todos }) => {
+const TodoList: React.FC<TodosProps> = ({ todos = [] }) => {
   const dispatch = useAppDispatch();
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [isNeedAddNewTodo, setIsNeedAddNewTodo] = useState(false);
@@ -60,7 +60,7 @@ const TodoList: React.FC<TodosProps> = ({ todos }) => {
           overflow: 'auto'
         }}
         ref={listRef}>
-        {todos.map((todo) => (
+        {todos?.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}

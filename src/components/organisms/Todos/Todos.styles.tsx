@@ -16,4 +16,5 @@ export const StyledText = styled.h3`
 
 export const StyledForm = styled.form`
   display: flex;
+  margin: 10px 0;
 `;

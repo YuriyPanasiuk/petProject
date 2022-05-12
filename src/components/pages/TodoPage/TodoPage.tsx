@@ -12,7 +12,9 @@ const TodoPage = () => {
   const { isLoading, todos } = useSelector(todoSelector);
 
   useEffect(() => {
-    dispatch(fetchTodos());
+    if (!todos) {
+      dispatch(fetchTodos());
+    }
   }, [dispatch]);
 
   return <StyledContainer>{isLoading ? <Loader /> : <Todos todos={todos} />}</StyledContainer>;

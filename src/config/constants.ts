@@ -1,5 +1,6 @@
 export enum AppRoutes {
   HOME = '/',
+  LOGIN = '/login',
   CHAT = '/chat',
   TODO_LIST = '/todo-list'
 }
